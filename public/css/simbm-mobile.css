@@ -1,0 +1,160 @@
+/*
+ * SIMBM — penyesuaian tampilan mobile / Android
+ */
+
+:root {
+    --simbm-safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Cegah zoom otomatis saat fokus input (font < 16px) */
+@media (max-width: 767px) {
+    .fi-input-wrp input,
+    .fi-input-wrp select,
+    .fi-input-wrp textarea,
+    .fi-fo-date-time-picker input,
+    input[type='date'],
+    input[type='text'],
+    input[type='number'],
+    select,
+    textarea {
+        font-size: 16px !important;
+    }
+}
+
+/* Area sentuh minimal 44px (rekomendasi aksesibilitas mobile) */
+@media (max-width: 767px) {
+    .fi-btn {
+        min-height: 2.75rem;
+    }
+
+    .fi-sidebar-item-button,
+    .fi-topbar-item-button {
+        min-height: 2.75rem;
+    }
+
+    .fi-fo-repeater-item-header {
+        min-height: 3rem;
+        padding-top: 0.625rem;
+        padding-bottom: 0.625rem;
+    }
+}
+
+/* Tombol simpan lebar penuh + sticky di bawah layar */
+.simbm-mobile-actions .fi-btn,
+.simbm-mobile-actions button {
+    width: 100%;
+}
+
+@media (max-width: 639px) {
+    .simbm-sticky-save {
+        position: sticky;
+        bottom: 0;
+        z-index: 20;
+        margin-top: 1.5rem;
+        margin-left: -0.5rem;
+        margin-right: -0.5rem;
+        padding: 1rem 0.5rem calc(1rem + var(--simbm-safe-bottom));
+        background: linear-gradient(
+            to top,
+            rgb(3 7 18 / 98%) 65%,
+            rgb(3 7 18 / 0%)
+        );
+        backdrop-filter: blur(6px);
+    }
+}
+
+@media (min-width: 640px) {
+    .simbm-sticky-save {
+        margin-top: 1.5rem;
+    }
+
+    .simbm-mobile-actions .fi-btn,
+    .simbm-mobile-actions button {
+        width: auto;
+    }
+}
+
+/* Scroll horizontal halus untuk tabel laporan */
+.simbm-table-scroll {
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+}
+
+@media (max-width: 767px) {
+    .simbm-table-scroll table {
+        min-width: 36rem;
+    }
+
+    .simbm-table-scroll th,
+    .simbm-table-scroll td {
+        padding-left: 0.625rem;
+        padding-right: 0.625rem;
+    }
+}
+
+/* Kartu laporan untuk layar kecil */
+.simbm-mobile-card {
+    border-radius: 0.75rem;
+    border: 1px solid rgb(255 255 255 / 10%);
+    background: rgb(3 7 18);
+    padding: 0.875rem 1rem;
+}
+
+.simbm-mobile-card + .simbm-mobile-card {
+    margin-top: 0.75rem;
+}
+
+.simbm-mobile-card__row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem;
+    font-size: 0.875rem;
+    line-height: 1.4;
+}
+
+.simbm-mobile-card__row + .simbm-mobile-card__row {
+    margin-top: 0.5rem;
+}
+
+.simbm-mobile-card__label {
+    color: rgb(156 163 175);
+    flex-shrink: 0;
+}
+
+.simbm-mobile-card__value {
+    color: rgb(243 244 246);
+    text-align: right;
+    word-break: break-word;
+}
+
+.simbm-mobile-card__title {
+    font-weight: 600;
+    color: rgb(243 244 246);
+    margin-bottom: 0.625rem;
+}
+
+.simbm-mobile-card__highlight {
+    font-size: 1.125rem;
+    font-weight: 700;
+}
+
+/* Header laporan stack di mobile */
+@media (max-width: 639px) {
+    .simbm-report-header {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 0.75rem;
+    }
+
+    .simbm-report-header .text-right {
+        text-align: left !important;
+    }
+}
+
+/* Padding bawah halaman agar tidak tertutup sticky button */
+@media (max-width: 639px) {
+    .fi-main-ctn {
+        padding-bottom: calc(1rem + var(--simbm-safe-bottom));
+    }
+}
