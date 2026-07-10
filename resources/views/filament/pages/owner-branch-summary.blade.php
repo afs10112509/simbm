@@ -1,28 +1,27 @@
 <x-filament-panels::page>
 
-    <div class="grid grid-cols-1 gap-4 mb-6 sm:grid-cols-2">
-        <div>
-            <label class="text-sm font-medium text-gray-300">Bulan</label>
-            <select wire:model.live="month" class="w-full mt-1 rounded-lg border-gray-600 dark:bg-gray-800">
+    <div class="simbm-filters sm:grid-cols-2">
+        <x-simbm.field label="Bulan">
+            <select wire:model.live="month" class="simbm-field__input">
                 @foreach (range(1, 12) as $monthOption)
                     <option value="{{ $monthOption }}">
                         {{ \Carbon\Carbon::create(null, $monthOption, 1)->translatedFormat('F') }}
                     </option>
                 @endforeach
             </select>
-        </div>
-        <div>
-            <label class="text-sm font-medium text-gray-300">Tahun</label>
-            <select wire:model.live="year" class="w-full mt-1 rounded-lg border-gray-600 dark:bg-gray-800">
+        </x-simbm.field>
+
+        <x-simbm.field label="Tahun">
+            <select wire:model.live="year" class="simbm-field__input">
                 @foreach (range(now()->year - 2, now()->year) as $yearOption)
                     <option value="{{ $yearOption }}">{{ $yearOption }}</option>
                 @endforeach
             </select>
-        </div>
+        </x-simbm.field>
     </div>
 
-    <div class="mb-4 text-sm text-gray-400">
-        Periode: <strong class="text-gray-200">{{ $this->getPeriodLabel() }}</strong>
+    <div class="mb-4 text-sm" style="color: var(--simbm-text-muted);">
+        Periode: <strong style="color: var(--simbm-text);">{{ $this->getPeriodLabel() }}</strong>
     </div>
 
     <div class="md:hidden">
@@ -59,34 +58,34 @@
         @endforeach
     </div>
 
-    <div class="hidden md:block overflow-x-auto rounded-xl ring-1 ring-white/10 simbm-table-scroll">
-        <table class="w-full text-sm">
-            <thead class="bg-gray-950 border-b border-white/10">
+    <div class="hidden md:block simbm-table-wrap">
+        <table class="simbm-table">
+            <thead>
                 <tr>
-                    <th class="px-3 py-3 text-left">Cabang</th>
-                    <th class="px-3 py-3 text-right">Kas Saldo</th>
-                    <th class="px-3 py-3 text-right">Kas Laba Bulan</th>
-                    <th class="px-3 py-3 text-right">Brilink Untung</th>
-                    <th class="px-3 py-3 text-right">Service Laba</th>
-                    <th class="px-3 py-3 text-right">Upah Kerja</th>
+                    <th>Cabang</th>
+                    <th class="text-right">Kas Saldo</th>
+                    <th class="text-right">Kas Laba Bulan</th>
+                    <th class="text-right">Brilink Untung</th>
+                    <th class="text-right">Service Laba</th>
+                    <th class="text-right">Upah Kerja</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($this->getRows() as $row)
-                    <tr class="border-b border-white/5">
-                        <td class="px-3 py-2">
-                            <div class="font-medium text-gray-100">{{ $row['branch']->name }}</div>
-                            <div class="text-xs text-gray-400">{{ $row['type_label'] }}</div>
+                    <tr>
+                        <td>
+                            <div class="font-medium">{{ $row['branch']->name }}</div>
+                            <div class="text-xs" style="color: var(--simbm-text-muted);">{{ $row['type_label'] }}</div>
                         </td>
-                        <td class="px-3 py-2 text-right">Rp {{ number_format($row['kas_saldo'], 0, ',', '.') }}</td>
-                        <td class="px-3 py-2 text-right">Rp {{ number_format($row['kas_laba_bulan'], 0, ',', '.') }}</td>
-                        <td class="px-3 py-2 text-right">
+                        <td class="text-right">Rp {{ number_format($row['kas_saldo'], 0, ',', '.') }}</td>
+                        <td class="text-right">Rp {{ number_format($row['kas_laba_bulan'], 0, ',', '.') }}</td>
+                        <td class="text-right">
                             {{ $row['brilink_untung_bulan'] !== null ? 'Rp ' . number_format($row['brilink_untung_bulan'], 0, ',', '.') : '—' }}
                         </td>
-                        <td class="px-3 py-2 text-right">
+                        <td class="text-right">
                             {{ $row['service_laba_bulan'] !== null ? 'Rp ' . number_format($row['service_laba_bulan'], 0, ',', '.') : '—' }}
                         </td>
-                        <td class="px-3 py-2 text-right">
+                        <td class="text-right">
                             {{ $row['upah_kerja_bulan'] !== null ? 'Rp ' . number_format($row['upah_kerja_bulan'], 0, ',', '.') : '—' }}
                         </td>
                     </tr>

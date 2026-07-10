@@ -1,111 +1,52 @@
 <x-filament-panels::page>
 
-    <div class="grid grid-cols-1 gap-3 mb-6 sm:grid-cols-3 sm:gap-4">
-
-        <div class="p-4 rounded-xl bg-gray-900">
-            <div class="text-sm text-gray-400">
-                Total Pemasukan
-            </div>
-
-            <div class="text-xl font-bold text-success-500 sm:text-2xl">
-                Rp {{ number_format($this->getTotalPemasukan(), 0, ',', '.') }}
-            </div>
-        </div>
-
-        <div class="p-4 rounded-xl bg-gray-900">
-            <div class="text-sm text-gray-400">
-                Total Pengeluaran
-            </div>
-
-            <div class="text-xl font-bold text-danger-500 sm:text-2xl">
-                Rp {{ number_format($this->getTotalPengeluaran(), 0, ',', '.') }}
-            </div>
-        </div>
-
-        <div class="p-4 rounded-xl bg-gray-900">
-            <div class="text-sm text-gray-400">
-                Laba
-            </div>
-
-            <div class="text-xl font-bold text-primary-500 sm:text-2xl">
-                Rp {{ number_format($this->getLaba(), 0, ',', '.') }}
-            </div>
-        </div>
-
+    <div class="simbm-stats-grid sm:grid-cols-3">
+        <x-simbm.stat-card
+            label="Total Pemasukan"
+            :value="'Rp ' . number_format($this->getTotalPemasukan(), 0, ',', '.')"
+            tone="success"
+        />
+        <x-simbm.stat-card
+            label="Total Pengeluaran"
+            :value="'Rp ' . number_format($this->getTotalPengeluaran(), 0, ',', '.')"
+            tone="danger"
+        />
+        <x-simbm.stat-card
+            label="Laba"
+            :value="'Rp ' . number_format($this->getLaba(), 0, ',', '.')"
+            tone="primary"
+        />
     </div>
 
-    <div class="grid grid-cols-1 gap-4 mb-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+    <div class="simbm-filters sm:grid-cols-2 lg:grid-cols-5">
+        <x-simbm.field label="Tanggal Mulai">
+            <input type="date" wire:model.live="tanggalMulai" class="simbm-field__input">
+        </x-simbm.field>
 
-        <div>
-            <label class="text-sm font-medium">Tanggal Mulai</label>
+        <x-simbm.field label="Tanggal Selesai">
+            <input type="date" wire:model.live="tanggalSelesai" class="simbm-field__input">
+        </x-simbm.field>
 
-            <input
-                type="date"
-                wire:model.live="tanggalMulai"
-                class="w-full mt-1 rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-800"
-            >
-        </div>
-
-        <div>
-            <label class="text-sm font-medium">Tanggal Selesai</label>
-
-            <input
-                type="date"
-                wire:model.live="tanggalSelesai"
-                class="w-full mt-1 rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-800"
-            >
-        </div>
-
-        <div>
-            <label class="text-sm font-medium">Cabang</label>
-
-            <select
-                wire:model.live="branchId"
-                class="w-full mt-1 rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-800"
-                @disabled(! \App\Support\AccessControl::canViewAllBranches())
-            >
-                <option value="">
-                    Semua Cabang
-                </option>
-
+        <x-simbm.field label="Cabang">
+            <select wire:model.live="branchId" class="simbm-field__input" @disabled(! \App\Support\AccessControl::canViewAllBranches())>
+                <option value="">Semua Cabang</option>
                 @foreach ($this->getBranches() as $branch)
-                    <option value="{{ $branch->id }}">
-                        {{ $branch->name }}
-                    </option>
+                    <option value="{{ $branch->id }}">{{ $branch->name }}</option>
                 @endforeach
             </select>
-        </div>
+        </x-simbm.field>
 
-        <div>
-            <label class="text-sm font-medium">Jenis</label>
-
-            <select
-                wire:model.live="type"
-                class="w-full mt-1 rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-800"
-            >
-                <option value="">
-                    Semua Jenis
-                </option>
-                <option value="income">
-                    Pemasukan
-                </option>
-                <option value="expense">
-                    Pengeluaran
-                </option>
+        <x-simbm.field label="Jenis">
+            <select wire:model.live="type" class="simbm-field__input">
+                <option value="">Semua Jenis</option>
+                <option value="income">Pemasukan</option>
+                <option value="expense">Pengeluaran</option>
             </select>
-        </div>
+        </x-simbm.field>
 
-        <div>
-            <label class="text-sm font-medium">Kategori</label>
-
-            <select
-                wire:model.live="categoryId"
-                class="w-full mt-1 rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-800"
-            >
-                <option value="">
-                    Semua Kategori
-                </option>
-
+        <x-simbm.field label="Kategori">
+            <select wire:model.live="categoryId" class="simbm-field__input">
+                <option value="">Semua Kategori</option>
                 @foreach ($this->getCategories() as $category)
                     <option value="{{ $category->id }}">
                         {{ $category->name }}
@@ -115,11 +56,9 @@
                     </option>
                 @endforeach
             </select>
-        </div>
-
+        </x-simbm.field>
     </div>
 
-    {{-- Kartu mobile --}}
     <div class="md:hidden">
         @forelse ($this->getTransactions() as $trx)
             <div class="simbm-mobile-card">
@@ -132,7 +71,7 @@
                 </div>
                 <div class="simbm-mobile-card__row">
                     <span class="simbm-mobile-card__label">Jenis</span>
-                    <span class="simbm-mobile-card__value {{ $trx->type === 'income' ? 'text-success-500' : 'text-danger-500' }}">
+                    <span class="simbm-mobile-card__value {{ $trx->type === 'income' ? 'text-success-600 dark:text-success-400' : 'text-danger-600 dark:text-danger-400' }}">
                         {{ $trx->type === 'income' ? 'Pemasukan' : 'Pengeluaran' }}
                     </span>
                 </div>
@@ -148,81 +87,41 @@
                 </div>
             </div>
         @empty
-            <div class="simbm-mobile-card text-center text-gray-400">
-                Tidak ada transaksi untuk filter yang dipilih.
-            </div>
+            <div class="simbm-empty">Tidak ada transaksi untuk filter yang dipilih.</div>
         @endforelse
     </div>
 
-    {{-- Tabel desktop --}}
-    <div class="hidden md:block overflow-x-auto simbm-table-scroll">
-
-        <table class="w-full text-sm">
-
-            <thead class="border-b border-gray-700">
-
+    <div class="hidden md:block simbm-table-wrap">
+        <table class="simbm-table">
+            <thead>
                 <tr>
-                    <th class="py-2 text-left">Tanggal & Jam</th>
-                    <th class="py-2 text-left">Cabang</th>
-                    <th class="py-2 text-left">Jenis</th>
-                    <th class="py-2 text-left">Kategori</th>
-                    <th class="py-2 text-left">Nominal</th>
+                    <th>Tanggal & Jam</th>
+                    <th>Cabang</th>
+                    <th>Jenis</th>
+                    <th>Kategori</th>
+                    <th class="text-right">Nominal</th>
                 </tr>
-
             </thead>
-
             <tbody>
-
                 @forelse ($this->getTransactions() as $trx)
-
-                    <tr class="border-b border-gray-800">
-
-                        <td class="py-2">
-                            {{ \App\Support\RecordDateTime::forTransaction($trx) }}
+                    <tr>
+                        <td>{{ \App\Support\RecordDateTime::forTransaction($trx) }}</td>
+                        <td>{{ $trx->branch?->name }}</td>
+                        <td class="{{ $trx->type === 'income' ? 'text-success-600 dark:text-success-400' : 'text-danger-600 dark:text-danger-400' }}">
+                            {{ $trx->type === 'income' ? 'Pemasukan' : 'Pengeluaran' }}
                         </td>
-
-                        <td class="py-2">
-                            {{ $trx->branch?->name }}
-                        </td>
-
-                        <td class="py-2">
-
-                            @if ($trx->type === 'income')
-                                <span class="text-success-500">
-                                    Pemasukan
-                                </span>
-                            @else
-                                <span class="text-danger-500">
-                                    Pengeluaran
-                                </span>
-                            @endif
-
-                        </td>
-
-                        <td class="py-2">
-                            {{ $trx->category?->name }}
-                        </td>
-
-                        <td class="py-2">
+                        <td>{{ $trx->category?->name }}</td>
+                        <td class="text-right font-medium">
                             Rp {{ number_format((float) $trx->amount, 0, ',', '.') }}
                         </td>
-
                     </tr>
-
                 @empty
-
-                    <tr>
-                        <td colspan="5" class="py-6 text-center text-gray-400">
-                            Tidak ada transaksi untuk filter yang dipilih.
-                        </td>
+                    <tr class="simbm-table-empty">
+                        <td colspan="5">Tidak ada transaksi untuk filter yang dipilih.</td>
                     </tr>
-
                 @endforelse
-
             </tbody>
-
         </table>
-
     </div>
 
 </x-filament-panels::page>

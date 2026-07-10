@@ -1,10 +1,10 @@
 <x-filament-panels::page>
 
     @if (! $this->hasTechnicians())
-        <div class="p-4 mb-6 text-sm rounded-xl border border-warning-500/30 bg-warning-500/10 text-warning-400">
+        <x-simbm.alert class="mb-6">
             Belum ada tukang service. Tambahkan di menu
             <strong>Data Tukang Service</strong> terlebih dahulu.
-        </div>
+        </x-simbm.alert>
     @endif
 
     {{ $this->form }}

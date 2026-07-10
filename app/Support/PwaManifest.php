@@ -74,7 +74,8 @@ class PwaManifest
             '<meta name="apple-mobile-web-app-title" content="' . e(self::shortName(AppSettings::appName())) . '">',
             '<meta name="theme-color" content="' . $themeColor . '">',
             '<link rel="apple-touch-icon" href="' . $appleIcon . '">',
-            '<link rel="stylesheet" href="' . asset('css/simbm-mobile.css') . '?v=1">',
+            '<link rel="stylesheet" href="' . asset('css/simbm-theme.css') . '?v=3">',
+            '<link rel="stylesheet" href="' . asset('css/simbm-mobile.css') . '?v=2">',
         ]);
     }
 
