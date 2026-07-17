@@ -14,7 +14,11 @@ class RoleSeeder extends Seeder
             Role::firstOrCreate(['name' => $role]);
         }
 
-        User::role('kasir')->each(fn (User $user) => $user->syncRoles(['pic']));
-        User::role('admin')->each(fn (User $user) => $user->syncRoles(['pic']));
+        // Migrasi role lama hanya jika role tersebut ada (instalasi lama)
+        foreach (['kasir', 'admin'] as $legacyRole) {
+            if (Role::where('name', $legacyRole)->where('guard_name', 'web')->exists()) {
+                User::role($legacyRole)->each(fn (User $user) => $user->syncRoles(['pic']));
+            }
+        }
     }
 }
